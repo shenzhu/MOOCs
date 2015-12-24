@@ -83,20 +83,49 @@ public class EarthquakeCityMap extends PApplet {
 	    	// PointFeatures also have a getLocation method
 	    }
 	    
-	    // Here is an example of how to use Processing's color method to generate 
-	    // an int that represents the color yellow.  
-	    int yellow = color(255, 255, 0);
 	    
-	    //TODO: Add code here as appropriate
+	    // construct SimplePointMarkers according to earthquakes
+	    constructSimplePointMarker(earthquakes, markers);
+	    // change color and radius based on magnitude
+	    changeColorAndRadius(markers);
+	    // add markers
+	    map.addMarkers(markers);
 	}
 		
+	private void changeColorAndRadius(List<Marker> markers) {
+		for(int i = 0; i < markers.size(); i++){
+			// get magnitude of marker
+			float mag = Float.parseFloat(markers.get(i).getProperty("magnitude").toString());
+			if(mag > THRESHOLD_MODERATE){
+				// set heavy earthquake to red, radius = 5
+				markers.get(i).setColor(color(255, 0, 0));
+				((SimplePointMarker) markers.get(i)).setRadius(20);
+			}else if(THRESHOLD_LIGHT < mag){
+				// set moderate earthquake to lime
+				markers.get(i).setColor(color(0, 255, 0));
+				((SimplePointMarker) markers.get(i)).setRadius(10);
+			}else{
+				// set light earthquake to yellow
+				markers.get(i).setColor(color(0, 0, 255));
+				((SimplePointMarker) markers.get(i)).setRadius(5);
+			}
+		}
+		
+	}
+
 	// A suggested helper method that takes in an earthquake feature and 
 	// returns a SimplePointMarker for that earthquake
-	// TODO: Implement this method and call it from setUp, if it helps
 	private SimplePointMarker createMarker(PointFeature feature)
 	{
-		// finish implementing and use this method, if it helps.
-		return new SimplePointMarker(feature.getLocation());
+		// construct SimplePointMarker based on loc and properties
+		return new SimplePointMarker(feature.getLocation(), feature.getProperties());
+	}
+	
+	// construct a list of SimplePointMarkers based on PointFeatures
+	private void constructSimplePointMarker(List<PointFeature> pointFeatures, List<Marker> markers){
+		for(PointFeature pointFeature : pointFeatures){
+			markers.add(createMarker(pointFeature));
+		}
 	}
 	
 	public void draw() {
@@ -110,7 +139,29 @@ public class EarthquakeCityMap extends PApplet {
 	// TODO: Implement this method to draw the key
 	private void addKey() 
 	{	
-		// Remember you can use Processing's graphics methods here
+		// add key using processing library
+		fill(color(255, 255, 255));
+		rect(25, 50, 150, 250, 7);
+		
+		String header = "Earthquake Key";
+		String heavyEarthquake = "5.0+ Magnitude";
+		String moderateEarthquake = "4.0+ Magnitude";
+		String lightEarthquake = "Below 4.0";
+		
+		// add circle
+		fill(color(255, 0, 0));
+		ellipse(40, 110, 20, 20);
+		fill(color(0, 255, 0));
+		ellipse(40, 160, 10, 10);
+		fill(color(0, 0, 255));
+		ellipse(40, 210, 5, 5);
+		
+		// add text
+		fill(color(0, 0, 0));
+		text(header, 50, 75);
+		text(heavyEarthquake, 70, 115);
+		text(moderateEarthquake, 70, 165);
+		text(lightEarthquake, 70, 215);
 	
 	}
 }
