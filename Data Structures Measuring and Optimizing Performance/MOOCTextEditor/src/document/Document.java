@@ -42,6 +42,25 @@ public abstract class Document {
 		return tokens;
 	}
 	
+	
+	/** Returns the tokens that match the regex pattern from a specified text
+	 * 
+	 * @param word
+	 * @return
+	 */
+	protected List<String> getTokens(String pattern, String target)
+	{
+		ArrayList<String> tokens = new ArrayList<String>();
+		Pattern tokSplitter = Pattern.compile(pattern);
+		Matcher m = tokSplitter.matcher(target);
+		
+		while(m.find()){
+			tokens.add(m.group());
+		}
+		
+		return tokens;
+	}
+	
 	// This is a helper function that returns the number of syllables
 	// in a word.  You should write this and use it in your 
 	// BasicDocument class.
@@ -53,7 +72,17 @@ public abstract class Document {
 		// TODO: Implement this method so that you can call it from the 
 	    // getNumSyllables method in BasicDocument (module 1) and 
 	    // EfficientDocument (module 2).
-	    return 0;
+		String vowels = "aeiouAEIOU";
+		List<String> syllables = getTokens("[aeiouyAEIOUY]+", word);
+		int wordSyllables = syllables.size();
+
+		//check if the last word is "e"
+		if((word.charAt(word.length() - 1) == 'e') && (wordSyllables > 1) &&
+				(vowels.indexOf(word.charAt(word.length() - 2)) == -1)){
+			wordSyllables--;
+		}
+		
+	    return wordSyllables;
 	}
 	
 	/** A method for testing
@@ -116,8 +145,16 @@ public abstract class Document {
 	/** return the Flesch readability score of this document */
 	public double getFleschScore()
 	{
-	    // TODO: Implement this method
-	    return 0.0;
+		// convert int to double before calculating, or it will lose the part after .
+	    double wordsentence = (double)getNumWords() / getNumSentences();
+	    double syllableword = (double)getNumSyllables() / getNumWords();
+	    
+	    //System.out.println(wordsentence);
+	    //System.out.println(syllableword);
+	    
+		double fleschScore = 206.835 - 1.015 * wordsentence - 84.6 * syllableword;
+
+	    return fleschScore;
 	}
 	
 	

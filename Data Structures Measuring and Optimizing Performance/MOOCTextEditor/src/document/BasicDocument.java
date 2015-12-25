@@ -28,9 +28,9 @@ public class BasicDocument extends Document
 	@Override
 	public int getNumWords()
 	{
-		//TODO: Implement this method.  See the Module 1 support videos 
-	    // if you need help.
-	    return 0;
+		//match word, use the helper function in Document.java
+		List<String> tokens = getTokens("[a-zA-Z]+");
+	    return tokens.size();
 	}
 	
 	/**
@@ -44,9 +44,9 @@ public class BasicDocument extends Document
 	@Override
 	public int getNumSentences()
 	{
-	    //TODO: Implement this method.  See the Module 1 support videos 
-        // if you need help.
-        return 0;
+	    //match sentences, use helper function in Document.java
+		List<String> tokens = getTokens("[^.?!]+");
+        return tokens.size();
 	}
 	
 	/**
@@ -60,9 +60,15 @@ public class BasicDocument extends Document
 	@Override
 	public int getNumSyllables()
 	{
-	    //TODO: Implement this method.  See the Module 1 support videos 
-        // if you need help.
-        return 0;
+		int numSyllables = 0;
+		
+	    //match syllables
+		List<String> words = getTokens("[a-zA-Z]+");
+		//loop over all the words and count syllables
+		for(String word : words){
+			numSyllables += countSyllables(word);
+		}
+        return numSyllables;
 	}
 	
 	
