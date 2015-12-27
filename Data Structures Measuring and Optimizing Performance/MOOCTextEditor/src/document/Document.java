@@ -67,6 +67,7 @@ public abstract class Document {
 	// You will probably NOT need to add a countWords or a countSentences method
 	// here.  The reason we put countSyllables here because we'll use it again
 	// next week when we implement the EfficientDocument class.
+	/*
 	protected int countSyllables(String word)
 	{
 		// TODO: Implement this method so that you can call it from the 
@@ -83,6 +84,30 @@ public abstract class Document {
 		}
 		
 	    return wordSyllables;
+	}
+	*/
+	
+	// another implementation of countSyllables
+	protected static int countSyllables(String word){
+		int numSyllables = 0;
+		boolean newSyllable = true;
+		String vowels = "aeiouy";
+		char[] cArray = word.toCharArray();
+		
+		for(int i = 0; i < cArray.length; i++){
+			if(i == cArray.length - 1 && Character.toLowerCase(cArray[i]) == 'e'
+					&& newSyllable && numSyllables > 0){
+				numSyllables--;
+			}
+			if(newSyllable && vowels.indexOf(Character.toLowerCase(cArray[i])) >= 0){
+				newSyllable = false;
+				numSyllables++;
+			}
+			else if(vowels.indexOf(Character.toLowerCase(cArray[i])) < 0){
+				newSyllable = true;
+			}
+		}
+		return numSyllables;
 	}
 	
 	/** A method for testing
