@@ -16,7 +16,14 @@ public class MyLinkedList<E> extends AbstractList<E> {
 
 	/** Create a new empty LinkedList */
 	public MyLinkedList() {
-		// TODO: Implement this method
+		// Implemented this method
+		this.head = new LLNode<E>(null);
+		this.tail = new LLNode<E>(null);
+		
+		this.head.next = this.tail;
+		this.tail.prev = this.head;
+		// set size
+		size = 0;
 	}
 
 	/**
@@ -25,16 +32,46 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	 */
 	public boolean add(E element ) 
 	{
-		// TODO: Implement this method
-		return false;
+		// Implemented this method
+		// create node
+		LLNode<E> newNode = new LLNode<E>(element);
+		
+		if(element == null){
+			throw new NullPointerException("Null Pointer Exception");
+		}
+		
+		if(this.size == 0){
+			this.head.next = newNode;
+			this.tail.prev = newNode;
+			
+			newNode.prev = this.head;
+			newNode.next = this.tail;
+		}else{
+			this.tail.prev.next = newNode;
+			newNode.prev = this.tail.prev;
+			newNode.next = this.tail;
+			this.tail.prev = newNode;
+		}
+		
+		this.size++;
+		return true;
 	}
 
 	/** Get the element at position index 
 	 * @throws IndexOutOfBoundsException if the index is out of bounds. */
 	public E get(int index) 
 	{
-		// TODO: Implement this method.
-		return null;
+		// Implemented this method
+		if(index < 0 || index >= size){
+			throw new IndexOutOfBoundsException("index " + index + " is out of bound");
+		}
+		
+		LLNode<E> currentNode = this.head.next;
+		for(int i = 0; i < index; i++){
+			currentNode = currentNode.next;
+		}
+			
+		return currentNode.data;
 	}
 
 	/**
@@ -44,15 +81,50 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	 */
 	public void add(int index, E element ) 
 	{
-		// TODO: Implement this method
+		// Implemented this method
+		if(index < 0 || index > this.size()){
+			throw new IndexOutOfBoundsException("Index out of bounds");
+		}
+		
+		if(element == null){
+			throw new NullPointerException("null pointer exception");
+		}
+		
+		LLNode<E> newNode = new LLNode<E>(element);
+		/**
+		if(index == 0){
+			this.head.next.prev = newNode;
+			newNode.next = this.head.next;
+			newNode.prev = this.head;
+			this.head.next = newNode;
+		}
+		
+		if(index == this.size() - 1){
+			this.tail.prev.next = newNode;
+			newNode.prev = this.tail.prev;
+			newNode.next = this.tail;
+			this.tail.prev = newNode;
+		}
+		*/
+		
+		LLNode<E> currentNode = this.head.next;
+		for(int i = 0; i < index; i++){
+			currentNode = currentNode.next;
+		}
+		currentNode.prev.next = newNode;
+		newNode.prev = currentNode.prev;
+		newNode.next = currentNode;
+		currentNode.prev = newNode;
+		
+		this.size++;
 	}
 
 
 	/** Return the size of the list */
 	public int size() 
 	{
-		// TODO: Implement this method
-		return -1;
+		// Implemented this method
+		return this.size;
 	}
 
 	/** Remove a node at the specified index and return its data element.
@@ -63,8 +135,22 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	 */
 	public E remove(int index) 
 	{
-		// TODO: Implement this method
-		return null;
+		// Implemented this method
+		if(index < 0 || index >= this.size()){
+			throw new IndexOutOfBoundsException("Index out of bound");
+		}
+		
+		LLNode<E> currentNode = this.head.next;
+		for(int i = 0; i < index; i++){
+			currentNode = currentNode.next;
+		}
+		currentNode.next.prev = currentNode.prev;
+		currentNode.prev.next = currentNode.next;
+		currentNode.prev = null;
+		currentNode.next = null;
+		
+		this.size--;
+		return currentNode.data;
 	}
 
 	/**
@@ -76,8 +162,23 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	 */
 	public E set(int index, E element) 
 	{
-		// TODO: Implement this method
-		return null;
+		// Implemented this method
+		if(index < 0 || index >= this.size()){
+			throw new IndexOutOfBoundsException("Index out of bound");
+		}
+		
+		if(element == null){
+			throw new NullPointerException("Null Pointer Exception");
+		}
+		
+		LLNode<E> currentNode = this.head.next;
+		for(int i = 0; i < index; i++){
+			currentNode = currentNode.next;
+		}
+		E replacedElement = currentNode.data;
+		currentNode.data = element;
+		
+		return replacedElement;
 	}   
 }
 
@@ -87,14 +188,28 @@ class LLNode<E>
 	LLNode<E> next;
 	E data;
 
-	// TODO: Add any other methods you think are useful here
+	// Added any other methods you think are useful here
 	// E.g. you might want to add another constructor
+	// another constructor and toString   
 
 	public LLNode(E e) 
 	{
 		this.data = e;
 		this.prev = null;
 		this.next = null;
+	}
+	
+	public LLNode(E e, LLNode<E> prevNode, LLNode<E> nextNode){
+		this.data = e;
+		this.prev = prevNode;
+		this.next = nextNode;
+	}
+	
+	public String toString(){
+		String nodeData = (String)this.data;
+		//System.out.println(nodeData);
+
+		return nodeData;
 	}
 
 }
