@@ -1,6 +1,7 @@
 package spelling;
 
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 import java.util.Collection;
 import java.util.HashMap;
@@ -29,9 +30,36 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	public boolean addWord(String word)
 	{
 	    //TODO: Implement this method.
-	    return false;
+		char[] chArray = word.toCharArray();
+		TrieNode currentNode = this.root;
+		boolean insert = false;
+		
+		for(char c: chArray){
+			if(currentNode.getChild(Character.toLowerCase(c)) != null){
+				currentNode = currentNode.getChild(Character.toLowerCase(c));
+				//check if the word already exists and if trie regards it as a word
+				if(currentNode.getText().equals(word.toLowerCase()) && !currentNode.endsWord()){
+					currentNode.setEndsWord(true);
+					insert = true;
+				}
+			}
+			//current char does not exist in trie, add new node
+			else{
+				currentNode = currentNode.insert(Character.toLowerCase(c));
+				insert = true;
+			}
+		}
+		currentNode.setEndsWord(true);
+				
+		//recalculate size
+		if(insert){
+			size++;
+			return true;
+		}else{
+			return false;
+		}
 	}
-	
+
 	/** 
 	 * Return the number of words in the dictionary.  This is NOT necessarily the same
 	 * as the number of TrieNodes in the trie.
@@ -39,7 +67,7 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	public int size()
 	{
 	    //TODO: Implement this method
-	    return 0;
+	    return this.size;
 	}
 	
 	
@@ -48,7 +76,29 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	public boolean isWord(String s) 
 	{
 	    // TODO: Implement this method
-		return false;
+		char[] chArray = s.toCharArray();
+		TrieNode currentNode = this.root;
+		
+		//handle empty input
+		if(chArray.length == 0){
+			return false;
+		}
+		
+		//search s
+		for(char c: chArray){
+			if(currentNode.getChild(Character.toLowerCase(c)) != null){
+				currentNode = currentNode.getChild(Character.toLowerCase(c));
+			}
+			else{
+				return false;
+			}
+		}
+		if(currentNode.getText().equals(s.toLowerCase()) && currentNode.endsWord()){
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 
 	/** 
@@ -74,9 +124,45 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
     	 //       remove the first Node from the queue
     	 //       If it is a word, add it to the completions list
     	 //       Add all of its child nodes to the back of the queue
-    	 // Return the list of completions
+    	 // Return the list of completions   	 
+    	 char[] chArray = prefix.toCharArray();
+    	 TrieNode currentNode = this.root;
+    	 LinkedList<TrieNode> bfsq = new LinkedList<TrieNode>();
+    	 List<String> suggestions = new LinkedList<String>();
     	 
-         return null;
+    	 //find prefix in trie
+    	 for(char c : chArray){
+    		 if(currentNode.getChild(Character.toLowerCase(c)) != null){
+    			 currentNode = currentNode.getChild(Character.toLowerCase(c));
+    		 }
+    	 }
+    	 //if trie does not contains prefix, can't provide suggestions, return empty list
+    	 if(!currentNode.getText().equals(prefix)){
+    		 return suggestions;
+    	 }
+    	 
+    	 //perform bfsearch from currentNode
+    	 bfsq.add(currentNode);
+		 //System.out.println(bfsq.size());
+		 //System.out.println(suggestions.size());
+    	 while(!bfsq.isEmpty() && suggestions.size() < numCompletions){
+    		 TrieNode firstNode = bfsq.removeFirst();
+    		 if(firstNode.endsWord() && !suggestions.contains(firstNode.getText())){
+    			 suggestions.add(firstNode.getText());
+    		 }
+    		 Set<Character> childrenChars = firstNode.getValidNextCharacters();
+    		 for(char c : childrenChars){
+    			 bfsq.add(firstNode.getChild(c));
+    		 }
+    		 
+    		 /*
+    		 System.out.println(suggestions.size());
+    		 for(String suggestion : suggestions){
+    			 System.out.print(suggestion + " ");
+    		 }
+    		 */
+    	 }
+         return suggestions;
      }
 
  	// For debugging

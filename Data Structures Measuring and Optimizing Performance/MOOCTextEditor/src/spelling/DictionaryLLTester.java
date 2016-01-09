@@ -46,7 +46,7 @@ public class DictionaryLLTester {
 	 */
 	@Test
 	public void testSize()
-	{
+	{	
 		assertEquals("Testing size for empty dict", 0, emptyDict.size());
 		assertEquals("Testing size for small dict", 4, smallDict.size());
 		assertEquals("Testing size for large dict", 4438, largeDict.size());

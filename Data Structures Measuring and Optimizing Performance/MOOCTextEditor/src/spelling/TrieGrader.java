@@ -7,7 +7,6 @@ import java.util.List;
 public class TrieGrader {
     StringBuilder feedback;
 
-
     public TrieGrader() {
         feedback = new StringBuilder();
     }
@@ -15,7 +14,7 @@ public class TrieGrader {
 
     public static void main(String[] args) {
         TrieGrader g = new TrieGrader();
-
+        
         PrintWriter out;
         try {
             out = new PrintWriter("output.out");
@@ -40,8 +39,7 @@ public class TrieGrader {
         }
 
         StringBuilder feedback = g.getFeedback();
-
-
+    
         out.println(feedback.toString());
         out.close();
     }

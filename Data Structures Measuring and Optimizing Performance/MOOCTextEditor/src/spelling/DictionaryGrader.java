@@ -4,14 +4,20 @@ import java.io.PrintWriter;
 
 public class DictionaryGrader {
     public static void main(String args[]) {
-        PrintWriter out;
+        //test
+    	//System.out.println("Here Runs");
+    	
+    	PrintWriter out;
         try {
             out = new PrintWriter("grader_output/module4.part1.out");
         } catch (Exception e) {
             e.printStackTrace();
             return;
         }
-
+        
+        //test
+    	//System.out.println("Here Runs");
+        
         int incorrect = 0;
         int tests = 0;
         String feedback = "";
@@ -60,10 +66,22 @@ public class DictionaryGrader {
             out.close();
             return;
         }
+        
+        //test
+    	//System.out.println("Here Runs");
 
         feedback += "Tests complete. Make sure everything looks right.";
-
+        
+        //test
+    	//System.out.println("Here Runs");
+        
         out.println(feedback);
+        
+        System.out.println(feedback);
+        
         out.close();
+        
+        //test
+    	//System.out.println("Here Runs");
     }
 }
