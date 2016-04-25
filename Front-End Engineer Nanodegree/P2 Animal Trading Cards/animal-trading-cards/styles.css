@@ -1,0 +1,39 @@
+/* add your CSS here */
+.outer-border {
+	width: 400px;
+	border: 1px groove #CCCCFF;
+	box-shadow: 0px 5px 5px #CCCCFF;
+	padding: 20px;
+}
+
+.image {
+	width: 400px;
+}
+
+.inner-border {
+	margin-top: 10px;
+	border: 1px groove #CCCCFF;
+	padding: 10px;
+}
+
+#header {
+	font-weight: bold;
+	font-size: 30px;
+}
+
+ul {
+	list-style-type: none;
+}
+
+li {
+	font-style: italic;
+}
+
+span {
+	font-style: normal;
+	font-weight: bold;
+}
+
+.italicize {
+	font-style: italic;
+}
